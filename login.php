@@ -51,12 +51,12 @@ if (estaLogeado()) {
               <?php endforeach; ?>
             <?php endif;} ?>
 
-           <input type="text" name="email" value="<?= $email ?>" placeholder="Correo electrónico">
+           <input class="<?php if ((isset($errores['email']))) {echo 'errorInput';} else {echo 'email';}?>" type="text" name="email" value="<?= $email ?>" placeholder="Correo electrónico">
 
            <br>
            <div class="separador1"></div>
 
-           <input type="password" name="pass" placeholder="Password">
+           <input class="<?php if ($errores['email'] != '') {echo 'errorInput';} else {echo 'contraseña';}?>" type="password" name="pass" placeholder="Password">
 
 
            <div class="separador"></div>
