@@ -70,6 +70,12 @@ footer li{ background-color: black; text-align: center; list-style: none; paddin
 #redes i:hover {color: #4F89C4;}
 #legal { color: white; font-size: 0.8em;}
 
+.errorInput {
+ border: 2px solid red;
+ width: 60%;
+ padding: 4px;
+}
+
 @media (min-width: 375px) {
   .login {width: 80%;}
 }
