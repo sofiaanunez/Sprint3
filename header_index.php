@@ -1,12 +1,12 @@
 <?php
-require_once('funciones.php');
+require_once('Clases/autoload.php');
  ?>
  <header>
    <h2><a href="#">Website Logo</a></h2>
    <nav>
      <?php
 
-     $log=estaLogeado();
+     $log=Autenticador::estaLogeado();
      if (empty($log)) {?>
      <li><a href="formulario.php">¡Registrate!</a></li>
      <li> | </li>
@@ -14,8 +14,8 @@ require_once('funciones.php');
    <?php }else{?>
      <li><a href="logout.php">Cerrar Sesion</a></li>
      <li> | </li>
-     <li><a href="#">¡Bienvenido, <?php echo " " .nombreUsuario($_SESSION['email']) ."!";  ?></a></li>
-   <?php } ?>
+     <li><a href="#">¡Bienvenido, <?php echo " " .Autenticador::nombreUsuario($_SESSION['id'],$conn) ."!";  ?></a></li>
+   <?php };?>
    </nav>
  </header>
 

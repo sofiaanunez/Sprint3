@@ -1,5 +1,18 @@
 <?php
-require_once('Clases/autoload.php');
+$dsn="mysql:host=localhost;dbname=ecommerce;charset=utf8mb4;port:3306";
+$user="root";
+$pass="";
+
+try {
+	$db=new PDO ($dsn,$user,$pass);
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+}
+catch (Exception $e){
+	echo "Hubo un error";
+	exit;
+}
+
+echo "Exito";
 $nombre = '';
 $apellido = '';
 $fecha = '';
@@ -12,8 +25,7 @@ $genero='';
 $pais= '';
 $provincia= '';
 $ciudad= '';
-$terminos='';
-$errores=[];
+$terminos = '';
 
 //GRABAR DATOS POST
 if ($_POST){
@@ -28,73 +40,113 @@ if (isset($_POST ['genero'])) {$genero= $_POST['genero'];}
 $pais= $_POST['pais'];
 $provincia= $_POST['provincia'];
 $ciudad= $_POST['ciudad'];
-//$terminos=$_POST['terminos']??null;
+$terminos=$_POST['terminos'];
+}
+	function existeEmail($email){
+
+		$sql="select email from usuarios where email = '".$email ."'";
+		$stmt = $db->prepare($sql);
+		$stmt->execute();
+		$emailsArray= $stmt->fetch();
+
+		if($emailsArray){
+			return true;
+		}
+	}
+
+function traerTodos($db){
+
+	$sql="select * from usuarios";
+	$stmt= $db->prepare($sql);
+	$stmt->execute();
+	$todosLosUsuariosArray=$stmt->fetchAll();
+
+	return $todosLosUsuariosArray;
 }
 
 
+// if ($_POST){
+// $nombre = trim($_POST['nombre']);
+// $apellido = trim($_POST['apellido']);
+// $profesion = trim($_POST['profesion']);
+// $email = trim($_POST['email']);
+// $fecha = $_POST['fecha'];
+// $pass2 = password_hash($_POST['pass2'], PASSWORD_DEFAULT);
+// $pais = $_POST['pais'];
+// $provincia = $_POST['provincia'];
+// $ciudad = $_POST['ciudad'];
+// $genero= $_POST['genero'];
+//
+// $sql="insert into usuarios values(default, '" .$email ."', '" .$pass2
+// ."', now(), '" .$nombre ."', '"  .$apellido ."', '" .$fecha ."', '" .$profesion
+// ."', '" .$genero ."', '" .$pais ."', '" .$provincia ."', '" .$ciudad ."')";
+//
+// $grabar = $db->prepare($sql);
+// $grabar->execute();
+// }
+
+function validarDatos($datos){
+		if (!$_POST['terminos']) {
+			$errores['terminos'] = "¡Debes aceptar los Términos y Condiciones!";}
+
+		if (!$datos['fecha']){
+			$errores['fecha'] = "¡Decinos cuándo es tu cumpleaños!";}
+
+		if ($datos['pais'] == 'Seleccione un pais'){
+			$errores['pais'] = "¡Decinos de qué pais sos!";}
+
+		if ($datos['provincia'] == 'Seleccione una provincia'){
+			$errores['provincia'] = "¡Decinos de qué provincia sos!";}
+
+		if ($datos['ciudad'] == 'Seleccione una Ciudad'){
+			$errores['ciudad'] = "¡Decinos de qué Ciudad sos!";}
+
+		if($_FILES['avatar'] ['name'] !== '') {
+			$nombreImg = $_FILES['avatar']['name'];
+			$extension=pathinfo($nombreImg, PATHINFO_EXTENSION);
+				if($_FILES['avatar']['error'] !== UPLOAD_ERR_OK){
+					$errores['avatar'] = "La imagen no se pudo cargar";
+				} elseif (!($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png')){
+					$errores['avatar'] = "La imagen no tiene un formato correcto";
+				}
+		}
+		return $errores;
+	}
+if($_POST){
+	$errores=validarDatos($_POST);
+	if($errores){
+		echo "ERROR";
+	} else {
+		echo "Todo OK";
+	}
+}
+
 ?>
-
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
-    <title>Formulario</title>
-      <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
-    <link rel="stylesheet" href="estilo_formulario.css">
+    <title></title>
   </head>
-  <?php require_once('header.php'); ?>
   <body>
-    <div class="cubo"><h3>
-      <strong>¡Registrate!</strong>
-    </h3>
-    <br>
-
-
     <form class="todo" method="post" enctype="multipart/form-data">
 
     <fieldset class="fondo">
 
-      <!-- AVISOS 1 -->
-      <?php
-      if($_POST){
-        $errores = Validador::validarDatos($_POST, $conn);
-        if(empty($errores)) {
-          $passHash = password_hash($pass2, PASSWORD_DEFAULT);
-          $usuario = new Usuario($email, $passHash);
-          $usuario->setNombre($nombre);
-          $usuario->setApellido($apellido);
-          $usuario->setFecha($fecha);
-          $usuario->setGenero($genero);
-          $usuario->setCiudad($ciudad);
-          $usuario->setProvincia($provincia);
-          $usuario->setProfesion($profesion);
-          $usuario->setPais($pais);
-
-          $conn->grabarUsuario($usuario);
-
-          header('location:registro-ok.php');
-          exit;
-        }
-      }
-
-       ?>
-
-
-
       <h1 class="titulo">Datos personales</h1>
       <hr>
       <br>
-      <input class="<?php if ((isset($errores['nombre']))) {echo 'errorInput';} else {echo 'campo';}?>" type="text" name="nombre"  placeholder="Nombre" value="<?php echo $nombre;?>"><label class="requerido">*</label>
+      <input class="<?php if ((isset($errores['nombre']))) {echo 'errorInput';} else {echo 'campo';}?>" type="text" name="nombre"  placeholder="Nombre y Apellido" value="<?php echo $nombre;?>"><label class="requerido">*</label>
       <?php if($_POST) if(isset($errores['nombre'])) {echo $errores['nombre'];} ?>
       <br>
       <br>
-      <input class="<?php if ((isset($errores['apellido']))) {echo 'errorInput';} else {echo 'campo';}?>" type="text" name="apellido"  placeholder="Apellido(s)" value="<?php echo $apellido;?>"><label class="requerido">*</label>
+			<input class="<?php if ((isset($errores['apellido']))) {echo 'errorInput';} else {echo 'campo';}?>" type="text" name="apellido"  placeholder="Apellido(s)" value="<?php echo $apellido;?>"><label class="requerido">*</label>
       <?php if($_POST) if(isset($errores['apellido'])) {echo $errores['apellido'];} ?>
-      <br>
-      <br>
+			<br><br>
+
       <label>Fecha de Nacimiento</label>
+
+      <br>
       <input type="date" class="<?php if ($_POST){if(isset($errores['fecha'])){echo 'errorDate';}}else{echo 'date';}?>" name='fecha' value="<?php echo $fecha; ?>">
       <?php if($_POST) if(isset($errores['fecha'])) {echo $errores['fecha'];} ?>
       </select>
@@ -176,11 +228,9 @@ $ciudad= $_POST['ciudad'];
           <input type="hidden" name="max_file_size" value="30000">
           <?php if (isset($errores['avatar'])) { echo "<br><br> <p class='errorAvatar'>" .$errores ['avatar'] ."<p>";} ?>
           <br><br>
-
-            <input class="check" type="checkbox" name="terminos"><a href="#"><label class="tyc">Acepto Terminos y Condiciones</label></a>
-      <label class="requerido">* Campo requerido</label>
-          <?php if (isset($errores['terminos'])) { echo $errores ['terminos'];} ?>
-
+      <input id="check" type="checkbox"  name="terminos"><a href="#"><label class="tyc">Acepto Terminos y Condiciones</label></a>
+<label class="requerido">* Campo requerido</label>
+	<?php if (isset($errores['terminos'])) { echo $errores ['terminos'];} ?>
 
       </fieldset>
 
@@ -194,12 +244,5 @@ $ciudad= $_POST['ciudad'];
     </div>
 
 </form>
-      <div class="separador"></div>
-</div>
-
-
-<?php require_once('footer.php'); ?>
-
-
   </body>
 </html>

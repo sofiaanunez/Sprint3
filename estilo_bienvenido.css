@@ -1,0 +1,79 @@
+*{ margin:0; padding: 0; box-sizing: border-box}
+
+body{ font-family: 'Roboto', sans-serif; background-color: #4F89C4; font-size: 14px;}
+
+/*header*/
+
+header { background-color: #081212; top:0; left:0; right:0; padding: 10px;}
+
+.main-header{float: left;}
+
+header .menu{display: inline-block;}
+
+/*icon*/
+
+header .menu-icon{ color: white;}
+
+header ul { display: block; }
+
+header li{display: inline; padding: 5px;}
+
+header li a { color: white;} /*header*/
+
+header li a:hover{background-color: #35363B;}
+
+.menu a{font-size: 0.9em; text-decoration: none; color: white; padding: 10px;}
+
+h2{padding: 20px; margin:10px auto; width:95%; font-size: 1em; text-align: center; background-color: #CECFF3;  border-radius: 20px;}
+
+.formulario{width: 90%; margin: 0 auto;}
+
+.formulario h3{padding: 15px; font-size: 1em; color:white; background-color: #4F89C4;}
+
+.formulario p{padding: 30px; font-size: 0.9em; background-color: #F0F0F0;  border-radius: 10px;}
+
+.formulario .aclass{padding: 20px; font-size: 0.9em; text-decoration: none; background-color: #F0F0F0; border-radius: 10px; display: inline-block; width: 100%;}
+
+.formulario .aclass ul{list-style: none; }
+
+.formulario .aclass ul li { display: inline-block; padding: 0 5px;}
+
+.separador{padding: 14px;}
+
+.redirigir {background: #4F89C4; padding: 13px 28px; border-radius: 6px; color:white; text-decoration: none;}
+
+/*footer*/
+
+.main-footer { display: flex; justify-content: flex-end; flex-direction: column; align-items: center;}
+
+footer a { text-decoration: none; color: white; }
+
+footer ul { width: 100%; background-color: black; }
+
+footer li{ background-color: black; text-align: center; list-style: none; padding: 2%; font-size: 1.2em; }
+
+#redes i {color: white;}
+
+#redes i:hover {color: #4F89C4;}
+#legal { color: white; font-size: 0.8em;}
+.boton{background: #4F89C4; padding: 3%; border-radius: 6px; color:white;}
+.boton a{ text-decoration: none; color: white; font-size: 0.9em;}
+@media (min-width:768px) {
+  .menu a{font-size: 1em;}
+  h2{font-size: 1.2em}
+  .formulario h3{font-size: 1.2em;}
+  .formulario p{font-size: 1em;}
+  .formulario .aclass{font-size: 1em;}
+  footer li {padding: 1%; font-size: 1em;}
+  #legal {font-size: 1em;}
+}
+
+@media (min-width:1024px) {
+  .menu a{font-size: 1.1em;}
+  h2 {font-size: 2em;}
+  .formulario h3{font-size: 1.4em;}
+  .formulario p{font-size: 1.2em;}
+  .formulario .aclass{font-size: 1.2em;}
+  footer li {padding: 0.5%; font-size: 1.3em;}
+  #legal {font-size: 1em;}
+}

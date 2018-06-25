@@ -43,7 +43,7 @@ input{padding: 8px; font-size: 0.7em;} /*padding de los placeholder*/
 
 /*boton de iniciar sesion*/
 
-.boton{background: #4F89C4; padding: 3%; border-radius: 6px; color:white;}
+.boton{background: #4F89C4; padding: 13px 28px; border-radius: 6px; color:white;}
 
 a{ text-decoration: none; color: white; font-size: 0.9em;}
 
@@ -70,14 +70,16 @@ footer li{ background-color: black; text-align: center; list-style: none; paddin
 #redes i:hover {color: #4F89C4;}
 #legal { color: white; font-size: 0.8em;}
 
-.errorInput {
- border: 2px solid red;
- width: 60%;
- padding: 4px;
-}
-
 @media (min-width: 375px) {
   .login {width: 80%;}
+
+  .errorInput {
+    border: 2px solid red;
+    width: 60%;
+    padding: 4px;
+  }
+
+  
 }
 @media (min-width: 768px) {
   header .menu{display: inline-block;}
@@ -94,7 +96,7 @@ footer li{ background-color: black; text-align: center; list-style: none; paddin
 @media (min-width: 1024px) {
   h2 {font-size: 2em;}
   input {font-size: 1em;}
-  .login {width: 50%;}
+  .login {width: 30%;}
   .menu a{font-size: 1.1em;}
   a {font-size: 1.2em;}
   .preguntas p {font-size: 1.1em;}

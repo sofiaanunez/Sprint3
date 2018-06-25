@@ -1,8 +1,6 @@
 <?php
-require_once('funciones.php');
-if (estaLogeado()) {
-  header('location:login.php');
-}
+require_once('Clases/autoload.php');
+
  ?>
 
 <!DOCTYPE html>
@@ -29,34 +27,49 @@ if (estaLogeado()) {
 
 
           <?php
+
           $email = '';
+          $pass='';
           $errores = [];
+          $usuario = new Usuario($email,$pass);
           if ($_POST) {
-              $email = trim($_POST['email']);
-              $errores = validarLoginUsuario($_POST);
+              $email = strtolower(trim($_POST['email']));
+              $pass=$_POST['pass'];
+              $errores = Validador::validarLoginUsuario($_POST, $conn);
+
               if (empty($errores)) {
-                $usuario = existeMail($email);
-                $_SESSION['email'] = existeMail($email);
+
+
+                $usuario = $conn->existeEmail($email);
+
+                Autenticador::loguearUsuario($usuario);
+
+                 if (!Autenticador::estaLogeado() && isset($_COOKIE['id'])) {
+                   Autenticador::loguearUsuario($_COOKIE['id']);
+                }
+
+                if (Autenticador::estaLogeado()) {
+                  header('location:index.php');
+                }else {
+                  header('location:login.php');
+                }
+
                 if ($_POST['recordarme']) {
                   setCookie('id', $email, time() + 3600);
                 }
+              }
 
-                loguearUsuario($usuario);
-                header('location:index.php');
-              } ?>
+            } ?>
 
-              <?php if (!empty($errores)): ?>
-              <?php foreach ($errores as $error): ?>
-              <p class="warning"> <?= $error ?> </p>
-              <?php endforeach; ?>
-            <?php endif;} ?>
-
+            <?php if($_POST) if(isset($errores['email'])) {echo $errores['email'];} ?>
            <input class="<?php if ((isset($errores['email']))) {echo 'errorInput';} else {echo 'email';}?>" type="text" name="email" value="<?= $email ?>" placeholder="Correo electrónico">
 
            <br>
            <div class="separador1"></div>
 
-           <input class="<?php if ($errores['email'] != '') {echo 'errorInput';} else {echo 'contraseña';}?>" type="password" name="pass" placeholder="Password">
+
+            <?php if($_POST) if(isset($errores['email'])) {echo $errores['email'];} ?>
+           <input class="<?php if ((isset($errores['email']))) {echo 'errorInput';} else {echo 'pass';}?>" type="password" name="pass" placeholder="Password">
 
 
            <div class="separador"></div>
@@ -73,7 +86,7 @@ if (estaLogeado()) {
 
              <br><br>
 
-             <a href="formulario2.php">¿No tienes una cuenta? <b>Regístrate</b></a>
+             <a href="formulario.php">¿No tienes una cuenta? <b>Regístrate</b></a>
            </div>
 
 

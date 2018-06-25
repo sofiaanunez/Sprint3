@@ -17,6 +17,7 @@
       <div class="opacidad" style=""> </div>
   		<div class="background-image" style=""> </div>
       <h1>eCommerce</h1>
+      <br>
   		<h3>Todo lo que buscas ¡En un solo lugar!</h3>
       <form>
         <input type="buscador" placeholder="¡Encontrá lo que necesitas!">
